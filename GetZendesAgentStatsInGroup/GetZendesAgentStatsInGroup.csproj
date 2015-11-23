@@ -59,7 +59,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ZendeskConnector\Common.csproj">
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
       <Project>{966cb1d4-42c9-4d90-876a-ce2466623d76}</Project>
       <Name>Common</Name>
     </ProjectReference>
