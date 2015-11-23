@@ -1,4 +1,5 @@
 ﻿using ZendeskApi_v2;
+using System.Configuration;
 
 namespace Common
 {
@@ -34,8 +35,13 @@ namespace Common
 
         private static void initialize()
         {
-            apiUrl = "https://" + Configuration.Default.Zendesk_subdomain + ".zendesk.com/api/v2";
-            api = new ZendeskApi(apiUrl, Configuration.Default.Username, Configuration.Default.Password);
+            var subdomain = ConfigurationManager.AppSettings["Zendesk_subdomain"];
+            var username = ConfigurationManager.AppSettings["Username"];
+            var password = ConfigurationManager.AppSettings["Password"];
+
+
+            apiUrl = "https://" + subdomain + ".zendesk.com/api/v2";
+            api = new ZendeskApi(apiUrl, username, password);
         }
     }
 }
