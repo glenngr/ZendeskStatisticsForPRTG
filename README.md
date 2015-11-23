@@ -2,6 +2,8 @@
 PRTG EXE/Advanced sensor that gets ticket stats from Zendesk
 
 ### Install instructions
+* Download binaries from https://github.com/glenngr/ZendeskStatisticsForPRTG/releases
+* -- or git clone and compile yourself
 * Edit the .config files with correct subdomain, username and password for Zendesk
 * Copy compiled files to PRTG Network Monitor\Custom Sensors\EXEXML
 * Add a new EXE/Advanced sensor in PRTG.
