@@ -56,10 +56,6 @@
     <Compile Include="ZenDeskApiManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Common.dll.config">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
