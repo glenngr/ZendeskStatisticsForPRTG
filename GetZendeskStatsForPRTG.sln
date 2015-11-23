@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetZendesAgentStatsInGroup", "GetZendesAgentStatsInGroup\GetZendesAgentStatsInGroup.csproj", "{D851324C-8516-44AA-B319-8EAFF7AB62C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetZendeskAgentStatsInGroup", "GetZendesAgentStatsInGroup\GetZendeskAgentStatsInGroup.csproj", "{D851324C-8516-44AA-B319-8EAFF7AB62C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{966CB1D4-42C9-4D90-876A-CE2466623D76}"
 EndProject
