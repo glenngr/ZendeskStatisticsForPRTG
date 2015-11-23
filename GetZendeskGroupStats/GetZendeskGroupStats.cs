@@ -8,7 +8,7 @@ using ZendeskApi_v2;
 
 namespace GetZendeskGroupStats
 {
-    public class Program
+    public class GetZendeskGroupStats
     {
         private static ZendeskApi _api;
         private static PrtgXmlOutput _xml;

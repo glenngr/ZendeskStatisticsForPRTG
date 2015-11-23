@@ -4,7 +4,7 @@ using Common;
 
 namespace GetZendeskAgentStatsInGroup
 {
-    class Program
+    class GetZendeskAgentStatsInGroup
     {
         private static ZendeskApi _api;
         private static PrtgXmlOutput _xml;
