@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZendeskApi_v2;
+using ZendeskApi_v2.Models.Tickets;
 
 namespace GetZendeskGroupStats
 {
@@ -101,8 +102,21 @@ namespace GetZendeskGroupStats
         private static void GetResult(long groupId)
         {
             string[] unwantedStatuses = { "closed", "solved" };
-            _allTicketsInGroup = _api.Tickets.GetAllTickets().Tickets.Where(t => t.GroupId == groupId).ToList();
-            _allOpenTicketsInGroup = _allTicketsInGroup.Where(t => !unwantedStatuses.Contains(t.Status.ToLower())).ToList();
+            string[] ticketTypes = {"problem", "incident"};
+
+            // Import first 100 tickets.
+            var ticketPage = _api.Tickets.GetAllTickets();
+            _allTicketsInGroup = new List<Ticket>();
+            _allTicketsInGroup.AddRange(ticketPage.Tickets.Where(t => t.GroupId == groupId).ToList());
+
+            // If more than 100 exist, import the rest as well
+            while (!string.IsNullOrEmpty(ticketPage.NextPage))
+            {
+                ticketPage = _api.Tickets.GetByPageUrl<GroupTicketResponse>(ticketPage.NextPage);
+                _allTicketsInGroup.AddRange(ticketPage.Tickets.Where(t => t.GroupId == groupId).ToList());
+            }
+
+            _allOpenTicketsInGroup = _allTicketsInGroup.Where(t => !unwantedStatuses.Contains(t.Status.ToLower()) && ticketTypes.Contains(t.Type.ToLower())).ToList();
 
             // Get number of open tickets
             GetNumOpenTicketsInGroup();
@@ -156,10 +170,9 @@ namespace GetZendeskGroupStats
         /// </summary>
         private static void GetNewTicketsToday()
         {
+            
             var numNewTicketsToday = _allTicketsInGroup.Count(t => t.CreatedAt >= dayStartDateTimeOffset && t.CreatedAt <= DateTimeOffset.Now);
             _xml.AddChannel("New tickets today", numNewTicketsToday.ToString());
         }
-
-
     }
 }

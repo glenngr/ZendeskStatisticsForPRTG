@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ZendeskApi_v2;
 using Common;
+using ZendeskApi_v2.Models.Tickets;
 
 namespace GetZendeskAgentStatsInGroup
 {
@@ -43,13 +45,32 @@ namespace GetZendeskAgentStatsInGroup
             // Loop through each agent in group
             foreach (var agent in agentsInGroup)
             {
-                // Get the agents tickets
-                var agentTickets = _api.Tickets.GetTicketsByUserID((long)agent.Id).Tickets.Where(t => t.GroupId == groupId).ToList();
                 string[] solvedStatus = { "closed", "solved" };
 
-                // Create a channel for this agent with the number of open tickets.
-                var openTickets = agentTickets.Count(t => !solvedStatus.Contains(t.Status.ToLower()));
-                _xml.AddChannel(agent.Name + "(Open)", openTickets.ToString());
+                // Get the agents tickets
+                if (agent.Id != null)
+                {
+                    var ticketPage = _api.Tickets.GetTicketsByUserID((long) agent.Id);
+                    var agentTickets = ticketPage.Tickets.Where(t => t.GroupId == groupId).ToList();
+
+                    // If more than 100 exist, import the rest as well
+                    while (!string.IsNullOrEmpty(ticketPage.NextPage))
+                    {
+                        ticketPage = _api.Tickets.GetByPageUrl<GroupTicketResponse>(ticketPage.NextPage);
+                        agentTickets.AddRange(ticketPage.Tickets.Where(t => t.GroupId == groupId).ToList());
+                    }
+
+                    // Create a channel for this agent with the number of open tickets.
+                    var openTickets = agentTickets.Where(t => !solvedStatus.Contains(t.Status.ToLower())).ToList();
+                    var problems = openTickets.Count(t => t.Type.Equals("problem"));
+                    var incidents = openTickets.Count(t => t.Type.Equals("incident"));
+                    var tasks = openTickets.Count(t => t.Type.Equals("task"));
+
+                    _xml.AddChannel(agent.Name + "(Problem)", problems.ToString());
+                    _xml.AddChannel(agent.Name + "(Incident)", incidents.ToString());
+                    _xml.AddChannel(agent.Name + "(Tasks)", tasks.ToString());
+                    _xml.AddChannel(agent.Name + "(Total open)", openTickets.Count.ToString());
+                }
             }
 
             // Output the finished XML.
