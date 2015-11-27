@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ZendeskApi_v2;
+using ZendeskApi_v2.Models.AccountsAndActivities;
+using ZendeskApi_v2.Models.Tickets;
 
 namespace Common
 {
@@ -19,7 +23,6 @@ namespace Common
         public static void PrintHelp(ZendeskApi api)
         {
             Console.WriteLine("You have to specify a group name or id as parameter");
-            Console.WriteLine("List of groups:");
             PrintGroups(api);
         }
 
@@ -28,6 +31,7 @@ namespace Common
         /// </summary>
         public static void PrintGroups(ZendeskApi api)
         {
+            Console.WriteLine("List of groups:");
             foreach (var group in api.Groups.GetGroups().Groups)
             {
                 Console.WriteLine(group.Id + ": " + group.Name);

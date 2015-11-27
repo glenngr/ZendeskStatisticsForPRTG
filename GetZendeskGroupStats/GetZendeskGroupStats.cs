@@ -22,14 +22,16 @@ namespace GetZendeskGroupStats
         /// All the OPEN tickets in the group supplied as parameter
         /// </summary>
         private static List<ZendeskApi_v2.Models.Tickets.Ticket> _allOpenTicketsInGroup;
+
         /// <summary>
         /// All tickets in the group
         /// </summary>
         private static List<ZendeskApi_v2.Models.Tickets.Ticket> _allTicketsInGroup;
+
         /// <summary>
         /// The start of today in DateTimeOffset
         /// </summary>
-        private static DateTimeOffset dayStartDateTimeOffset;
+        private static DateTimeOffset _dayStartDateTimeOffset;
 
         static void Main(string[] args)
         {
@@ -37,7 +39,7 @@ namespace GetZendeskGroupStats
             _xml = new PrtgXmlOutput();
 
             var today = DateTime.Today;
-            dayStartDateTimeOffset = (DateTimeOffset)today;
+            _dayStartDateTimeOffset = (DateTimeOffset)today;
 
             if (args == null || args.Length == 0)
             {
@@ -159,7 +161,7 @@ namespace GetZendeskGroupStats
         /// </summary>
         private static void GetNumSolvedToday()
         {
-            var todaysTickets = _allTicketsInGroup.Where(t => t.UpdatedAt >= dayStartDateTimeOffset && t.UpdatedAt <= DateTimeOffset.Now).ToList();
+            var todaysTickets = _allTicketsInGroup.Where(t => t.UpdatedAt >= _dayStartDateTimeOffset && t.UpdatedAt <= DateTimeOffset.Now).ToList();
 
             var numSolvedToday = todaysTickets.Count(t => t.Status.ToLower().Equals("solved"));
             _xml.AddChannel("Tickets solved today", numSolvedToday.ToString());
@@ -171,7 +173,7 @@ namespace GetZendeskGroupStats
         private static void GetNewTicketsToday()
         {
             
-            var numNewTicketsToday = _allTicketsInGroup.Count(t => t.CreatedAt >= dayStartDateTimeOffset && t.CreatedAt <= DateTimeOffset.Now);
+            var numNewTicketsToday = _allTicketsInGroup.Count(t => t.CreatedAt >= _dayStartDateTimeOffset && t.CreatedAt <= DateTimeOffset.Now);
             _xml.AddChannel("New tickets today", numNewTicketsToday.ToString());
         }
     }
