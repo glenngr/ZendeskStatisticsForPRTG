@@ -43,7 +43,7 @@ namespace GetZendeskGroupStats
 
             if (args == null || args.Length == 0)
             {
-                Common.Tools.PrintHelp(_api);
+                Common.Tools.PrintGroupHelp(_api);
                 return;
             }
 
@@ -118,7 +118,7 @@ namespace GetZendeskGroupStats
                 _allTicketsInGroup.AddRange(ticketPage.Tickets.Where(t => t.GroupId == groupId).ToList());
             }
 
-            _allOpenTicketsInGroup = _allTicketsInGroup.Where(t => !unwantedStatuses.Contains(t.Status.ToLower()) && ticketTypes.Contains(t.Type.ToLower())).ToList();
+            _allOpenTicketsInGroup = _allTicketsInGroup.Where(t => t.Status != null && t.Type != null && !unwantedStatuses.Contains(t.Status.ToLower()) && ticketTypes.Contains(t.Type.ToLower())).ToList();
 
             // Get number of open tickets
             GetNumOpenTicketsInGroup();
