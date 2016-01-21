@@ -18,9 +18,36 @@ namespace Common
         }
 
         /// <summary>
+        /// Print help for assemblies requiring agent ids as parameter
+        /// </summary>
+        /// <param name="api"></param>
+        public static void PringAgentHelp(ZendeskApi api)
+        {
+            Console.WriteLine("You have to specify at least one agent id as parameter separated by spaces");
+            PrintAgentIds(api);
+        }
+
+        /// <summary>
+        /// Prints agent ids
+        /// </summary>
+        /// <param name="api"></param>
+        private static void PrintAgentIds(ZendeskApi api)
+        {
+            Console.WriteLine("List of agents");
+            var users = api.Users.GetAllUsers();
+
+            var agents = users.Users.Where(u => u.Role.ToLower().Equals("agent"));
+
+            foreach (var agent in agents)
+            {
+                Console.WriteLine(agent.Id + ": " + agent.Name);
+            }
+        }
+
+        /// <summary>
         /// Print help message
         /// </summary>
-        public static void PrintHelp(ZendeskApi api)
+        public static void PrintGroupHelp(ZendeskApi api)
         {
             Console.WriteLine("You have to specify a group name or id as parameter");
             PrintGroups(api);

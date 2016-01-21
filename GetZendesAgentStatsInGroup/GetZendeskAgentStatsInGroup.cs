@@ -18,7 +18,7 @@ namespace GetZendeskAgentStatsInGroup
 
             if (args == null || args.Length == 0)
             {
-                Common.Tools.PrintHelp(_api);
+                Common.Tools.PrintGroupHelp(_api);
                 return;
             }
 
